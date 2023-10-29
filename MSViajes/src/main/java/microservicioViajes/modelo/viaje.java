@@ -1,5 +1,7 @@
 package microservicioViajes.modelo;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -35,28 +37,32 @@ public class viaje {
 
 	// fechas del viaje
 	@Column
-	private LocalDate fechaInicio;
+	private Date fechaInicio;
 
 	@Column
-	private LocalDate fechaFin;
+	private Date fechaFin;
 
 	// horas del viaje
 	@Column
-	private LocalTime horaInicio;
+	private Time horaInicio;
 
 	@Column
-	private LocalTime horaFin;
+	private Time horaFin;
+	
+	// id del monopatin utilizado
+	@Column
+	private float kmRecorridos;
 
 	// constructor vacio
 	public viaje() {
 	}
 
-	public viaje(int idUsuario, int idParadaInicio, int idMonopatin) {
+	public viaje(int idUsuario, int idParadaInicio, int idMonopatin,Date diaInicio,Time horainicio) {
 		this.idUsuario = idUsuario;
 		this.idParadaInicio = idParadaInicio;
 		this.idMonopatin = idMonopatin;
-		this.fechaInicio = LocalDate.now();
-		this.horaInicio = LocalTime.now().withNano(0);
+		this.fechaInicio = diaInicio;
+		this.horaInicio = horainicio;
 	}
 
 	public int getId() {
@@ -83,27 +89,27 @@ public class viaje {
 		return idMonopatin;
 	}
 
-	public LocalDate getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public LocalDate getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(LocalDate fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 
-	public LocalTime getHoraInicio() {
+	public Time getHoraInicio() {
 		return horaInicio;
 	}
 
-	public LocalTime getHoraFin() {
+	public Time getHoraFin() {
 		return horaFin;
 	}
 
-	public void setHoraFin(LocalTime horaFin) {
+	public void setHoraFin(Time horaFin) {
 		this.horaFin = horaFin;
 	}
 

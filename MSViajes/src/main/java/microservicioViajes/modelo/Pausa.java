@@ -1,6 +1,6 @@
 package microservicioViajes.modelo;
 
-import java.time.LocalTime;
+import java.sql.Time;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,17 +20,17 @@ public class Pausa {
 	private int idViaje;
 
 	@Column
-	private LocalTime inicioPausa;
-
+	private Time inicioPausa;
+	
 	@Column
-	private LocalTime finPausa;
+	private Time finPausa;
 
 	public Pausa() {
 	}
 
-	public Pausa(int idViaje) {
-		this.idViaje = idViaje;
-		this.inicioPausa = LocalTime.now().withNano(0);
+	public Pausa(int idViaje,Time inicioPausa) {
+	    this.idViaje = idViaje;
+	    this.inicioPausa = inicioPausa; 
 	}
 
 	public int getId() {
@@ -41,15 +41,19 @@ public class Pausa {
 		return idViaje;
 	}
 
-	public LocalTime getInicioParada() {
-		return inicioPausa;
+	public Time getInicioPausa() {
+	    return inicioPausa;
 	}
 
-	public LocalTime getFinParada() {
-		return finPausa;
+	public void setInicioPausa(Time inicioPausa) {
+		this.inicioPausa = inicioPausa;
 	}
 
-	public void setFinParada(LocalTime finParada) {
-		this.finPausa = finParada;
+	public Time getFinPausa() {
+	    return finPausa;
+	}
+
+	public void setFinPausa(Time finPausa) {
+	    this.finPausa = finPausa;
 	}
 }
