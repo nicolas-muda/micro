@@ -1,9 +1,6 @@
 package microservicioViajes.controlador;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import microservicioViajes.modelo.viaje;
 import microservicioViajes.repositorio.ViajeRepositorio;
+import microservicioViajes.servicio.ViajeServicio;
+import microservicioViajes.dtos.*;
 
 @RestController
 @RequestMapping("/MSViajes/Viaje")
 public class ViajeControlador {
 
+	@Autowired
+	private ViajeServicio viajeServicio;
 	@Autowired
 	private ViajeRepositorio viajeRepositorio;
 
@@ -33,25 +34,26 @@ public class ViajeControlador {
 	// finalizar viaje listo
 	@PutMapping("/finalizarViaje/{idViaje}/{idParada}/{kmReco}")
 	public void finalizarViaje(@PathVariable int idViaje, @PathVariable int idParada, @PathVariable float kmReco) {
-		// consigo la hora actual
-		LocalTime horaActual = LocalTime.now();
-		// lo convierto en Time que lo toma mysql
-		Time horaFin = Time.valueOf(horaActual);
-
-		// consigo el dia actual
-		LocalDate diaActual = LocalDate.now();
-		// lo convierto en Time que lo toma mysql
-		Date fechaFin = Date.valueOf(diaActual);
-
-		viajeRepositorio.finalizarViaje(idViaje, fechaFin, horaFin, idParada, kmReco);
+		viajeServicio.finalizarViaje(idViaje, idParada, kmReco);
 	}
-	
-	//calcularTiempoUso
-	@GetMapping("/calcularTiempo/")
-	public int tiempoUsoMonopatin() {
-		return 0;
+
+	// reporte de monopatines por km
+	@GetMapping("/reporteKm")
+	public List<reporteUsoPorKm> ReporteKM() {
+		return viajeServicio.reporteKm();
 	}
-	
-	//calcularKmRecorridos
+
+	// reporte de monopatines por km
+	@GetMapping("/reporteTiempo/{selector}")
+	public List<reporteUsoPorTiempo> ReporteTiempo(@PathVariable int selector) {
+		if (selector == 0) {
+			return viajeServicio.reporteTiempoSinPausa();
+		} else {
+			return viajeServicio.reporteTiempoConPausa();
+		}
+
+	}
+
+	// calcularKmRecorridos
 	// calcularPrecioViaje
 }

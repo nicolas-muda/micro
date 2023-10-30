@@ -2,8 +2,6 @@ package microservicioViajes.controlador;
 
 import java.sql.Time;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import microservicioViajes.modelo.Pausa;
 import microservicioViajes.repositorio.PausaRepositorio;
+import microservicioViajes.servicio.PausaServicio;
 
 @RestController
 @RequestMapping("/MSViajes/Pausa")
 public class PausaControlador {
+
+	@Autowired
+	private PausaServicio pausaServicio;
 
 	@Autowired
 	private PausaRepositorio pausaRepositorio;
@@ -38,26 +40,12 @@ public class PausaControlador {
 		// lo convierto en Time que lo toma mysql
 		Time horaActualSQL = Time.valueOf(horaActual);
 		pausaRepositorio.IngresaFinPausa(idPausa, horaActualSQL);
-
 	}
 
 	// retorna el tiempo de la pausa
 	@GetMapping("/tiempoPausa/{idViaje}")
 	public int getTiempoParada(@PathVariable int idViaje) {
-		int totalMinutos = 0;
-		List<Pausa> lista = pausaRepositorio.PausasIdViaje(idViaje);
-		// por cada pausa agarra la hora inicio y final las resta y las convierte en
-		// minutos
-		for (int i = 0; i < lista.size(); i++) {
-			long tiempoInicio = lista.get(i).getInicioPausa().getTime();
-			long tiempoFinal = lista.get(i).getFinPausa().getTime();
-
-			long diferenciaTiempo = tiempoFinal - tiempoInicio;
-			// Convierte la diferencia de milisegundos a minutos
-			int minutosEnIntervalo = (int) (diferenciaTiempo / (60 * 1000));
-
-			totalMinutos += minutosEnIntervalo;
-		}
+		int totalMinutos = pausaServicio.getTiempoParada(idViaje);
 		return totalMinutos;
 	}
 
