@@ -156,4 +156,29 @@ public class ViajeServicio {
 
 		return resultados;
 	}
+
+	public List<Integer> reporteMonopatinesUsados(int cantViajes, int año) {
+		List<viaje> viajes = viajeRepositorio.findAll();
+		// retornamos una lista con los id de los monopatines que cumplan
+		List<Integer> monopatines = new ArrayList<>();
+
+		// por cada viaje agarro el id del monopatin y cuento cuantas veces aparecio
+		for (int i = 0; i < viajes.size(); i++) {
+			int idActual = viajes.get(i).getIdMonopatin();
+			int usosAño = 0;
+
+			// recorro para ver cuantas veces se uso en el año
+			for (int j = 0; j < viajes.size(); j++) {
+				if (viajes.get(i).getFechaInicio().getYear() == año) {
+					usosAño += 1;
+				}
+			}
+
+			if (usosAño >= cantViajes) {
+				monopatines.add(idActual);
+			}
+		}
+
+		return monopatines;
+	}
 }

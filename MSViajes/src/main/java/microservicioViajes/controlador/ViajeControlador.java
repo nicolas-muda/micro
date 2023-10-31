@@ -38,10 +38,16 @@ public class ViajeControlador {
 		viajeServicio.finalizarViaje(idViaje, idParada, kmReco);
 	}
 
-	// reporte de monopatines por tiempo listo
-	@GetMapping("/reporte/{selector}")
+	// reporte de uso de monopatines
+	@GetMapping("/reporteUso/{selector}")
 	public List<ReporteUso> ReporteUso(@PathVariable int selector) {
 		return viajeServicio.reporteUso(selector);
+	}
+
+	// reporte de uso de monopatines x año
+	@GetMapping("/reporteMonoViaje/{cantViajes}/{año}")
+	public List<Integer> ReporteMonopatinesUsados(@PathVariable int cantViajes,@PathVariable int año) {
+		return viajeServicio.reporteMonopatinesUsados(cantViajes,año);
 	}
 
 	// calcularPrecioViaje
