@@ -13,7 +13,7 @@ public class PausaServicio {
 
 	@Autowired
 	private PausaRepositorio pausaRepositorio;
-	
+
 	public int getTiempoParada(int idViaje) {
 		int totalMinutos = 0;
 		List<Pausa> lista = pausaRepositorio.PausasIdViaje(idViaje);

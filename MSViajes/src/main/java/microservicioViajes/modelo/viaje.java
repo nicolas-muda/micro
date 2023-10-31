@@ -67,6 +67,14 @@ public class viaje {
 		return id;
 	}
 
+	public float getKmRecorridos() {
+		return kmRecorridos;
+	}
+
+	public void setKmRecorridos(float kmRecorridos) {
+		this.kmRecorridos = kmRecorridos;
+	}
+
 	public int getIdUsuario() {
 		return idUsuario;
 	}

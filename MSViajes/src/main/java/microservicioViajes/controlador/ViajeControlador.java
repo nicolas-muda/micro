@@ -1,6 +1,7 @@
 package microservicioViajes.controlador;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,23 +38,21 @@ public class ViajeControlador {
 		viajeServicio.finalizarViaje(idViaje, idParada, kmReco);
 	}
 
-	// reporte de monopatines por km
-	@GetMapping("/reporteKm")
-	public List<reporteUsoPorKm> ReporteKM() {
-		return viajeServicio.reporteKm();
+	// reporte de monopatines por tiempo listo
+	@GetMapping("/reporte/{selector}")
+	public List<ReporteUso> ReporteUso(@PathVariable int selector) {
+		return viajeServicio.reporteUso(selector);
 	}
 
-	// reporte de monopatines por km
-	@GetMapping("/reporteTiempo/{selector}")
-	public List<reporteUsoPorTiempo> ReporteTiempo(@PathVariable int selector) {
-		if (selector == 0) {
-			return viajeServicio.reporteTiempoSinPausa();
-		} else {
-			return viajeServicio.reporteTiempoConPausa();
-		}
-
-	}
-
-	// calcularKmRecorridos
 	// calcularPrecioViaje
+	@GetMapping("/precio/{idViaje}/{precioKm}")
+	public float calculadorPrecio(@PathVariable int idViaje, @PathVariable float precioKm) {
+		Optional<viaje> v = viajeRepositorio.findById(idViaje);
+		if (v.isPresent()) {
+			float distanciaKm = v.get().getKmRecorridos();
+			return distanciaKm * precioKm;
+		} else {
+			return 0;
+		}
+	}
 }
