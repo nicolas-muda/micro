@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import microservicioViajes.repositorio.ViajeRepositorio;
 import microservicioViajes.controlador.PausaControlador;
 import microservicioViajes.dtos.*;
+import microservicioViajes.modelo.Configuracion;
 import microservicioViajes.modelo.viaje;
 
 @Service
@@ -21,6 +22,8 @@ public class ViajeServicio {
 	private ViajeRepositorio viajeRepositorio;
 	@Autowired
 	private PausaControlador pausaControlador;
+	@Autowired
+	private ConfiguracionServicio ConfiguracionServicio;
 
 	public void finalizarViaje(int idViaje, int idParada, float kmReco) {
 		// consigo la hora actual
@@ -180,5 +183,48 @@ public class ViajeServicio {
 		}
 
 		return monopatines;
+	}
+
+	public float Reporteganancias(Date fechaInicio, Date fechaFin) {
+		// traigo todos los viajes
+		List<viaje> listaViaje = viajeRepositorio.findAll();
+		// traigo todos los precios
+		List<Configuracion> listaPrecio = ConfiguracionServicio.traerListadoPrecios();
+
+		float ganancia = 0;
+		float tarifa1 = 0;
+		float tarifa2 = 0;
+
+		for (int i = 0; i < listaViaje.size(); i++) {
+			// obtengo la fecha que se realizo el viaje
+			Date inicioViaje = listaViaje.get(i).getFechaInicio();
+
+			// si la fecha del viaje esta entre fecha inicio y fecha fin ahi calculo el
+			// precio
+			if ((inicioViaje.after(fechaInicio) || inicioViaje.equals(fechaInicio))
+					&& (inicioViaje.before(fechaFin) || inicioViaje.equals(fechaFin))) {
+
+				// busco los precio en el momento de la fecha del viaje
+				for (int j = 0; j < listaPrecio.size(); j++) {
+					// si la fecha del precio es menor que la fecha del viaje lo actualiza
+					if (listaPrecio.get(i).getFechaCambio().before(inicioViaje)) {
+						tarifa1 = listaPrecio.get(i).getTarifa1();
+						tarifa2 = listaPrecio.get(i).getTarifa2();
+					}
+				}
+
+				// ahora veo cual precio aplico si pasa los 15 aplico precio2
+				if (pausaControlador.getTiempoParada(listaViaje.get(i).getId()) > 15) {
+					ganancia += listaViaje.get(i).getKmRecorridos() * tarifa2;
+				}
+				// sino precio1
+				else {
+					ganancia += listaViaje.get(i).getKmRecorridos() * tarifa1;
+				}
+
+			}
+
+		}
+		return ganancia;
 	}
 }

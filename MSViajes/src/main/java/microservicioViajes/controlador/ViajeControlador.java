@@ -1,5 +1,6 @@
 package microservicioViajes.controlador;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,11 +47,17 @@ public class ViajeControlador {
 
 	// reporte de uso de monopatines x año
 	@GetMapping("/reporteMonoViaje/{cantViajes}/{año}")
-	public List<Integer> ReporteMonopatinesUsados(@PathVariable int cantViajes,@PathVariable int año) {
-		return viajeServicio.reporteMonopatinesUsados(cantViajes,año);
+	public List<Integer> ReporteMonopatinesUsados(@PathVariable int cantViajes, @PathVariable int año) {
+		return viajeServicio.reporteMonopatinesUsados(cantViajes, año);
 	}
 
-	// calcularPrecioViaje
+	// reporte de ganancias entre dos fechas
+	@GetMapping("/reporteGanancias/{fechaInicio}/{fechaFin}")
+	public float Reporteganancias(@PathVariable Date fechaInicio, @PathVariable Date fechaFin) {
+		return viajeServicio.Reporteganancias(fechaInicio, fechaFin);
+	}
+
+	// calcularPrecioViaje este creo que hay que volarlo
 	@GetMapping("/precio/{idViaje}/{precioKm}")
 	public float calculadorPrecio(@PathVariable int idViaje, @PathVariable float precioKm) {
 		Optional<viaje> v = viajeRepositorio.findById(idViaje);
