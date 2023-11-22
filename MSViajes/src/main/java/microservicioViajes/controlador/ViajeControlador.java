@@ -31,8 +31,8 @@ public class ViajeControlador {
 
 	// crear viaje listo
 	@PostMapping
-	public void crearViaje(@RequestBody viaje v) {
-		viajeRepositorio.save(v);
+	public void crearViaje(@RequestBody ViajeDto v) {
+		viajeServicio.crearViaje(v);
 	}
 
 	// finalizar viaje listo

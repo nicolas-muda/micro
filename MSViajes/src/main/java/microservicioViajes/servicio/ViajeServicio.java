@@ -227,4 +227,16 @@ public class ViajeServicio {
 		}
 		return ganancia;
 	}
+
+	public void crearViaje(ViajeDto v) {
+
+		int idUsuario = v.getIdUsuario();
+		int idParadaInicio = v.getIdParadaInicio();
+		int idMonopatin = v.getIdMonopatin();
+		Date fechaInicio = v.getFechaInicio();
+		Time horaInicio = v.getHoraInicio();
+
+		viaje nuevoViaje = new viaje(idUsuario, idParadaInicio, idMonopatin, fechaInicio, horaInicio);
+		viajeRepositorio.save(nuevoViaje);
+	}
 }
